@@ -20,7 +20,9 @@ public class UserPService implements CrudService<UserP> {
     public void createUserP(UserP userP) {
         try {
             EntityManager em = emp.getEntityManager();
+            em.getTransaction().begin();
             em.persist(userP);
+            em.getTransaction().commit();
         } catch (Exception e) {
             throw new RuntimeException("Error al crear el usuario", e);
         }
@@ -52,9 +54,13 @@ public class UserPService implements CrudService<UserP> {
         try {
             EntityManager em = emp.getEntityManager();
             if (user.getId() != null && user.getId() > 0) {
+                em.getTransaction().begin();
                 em.merge(user);
+                em.getTransaction().commit();
             } else {
+                em.getTransaction().begin();
                 em.persist(user);
+                em.getTransaction().commit();
             }
         }catch (Exception e) {
             throw new ServiceJdbcException(e.getMessage(), e.getCause());
