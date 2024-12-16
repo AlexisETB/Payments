@@ -20,7 +20,9 @@ public class PaymentMethodService implements CrudService<PaymentMethod> {
     @Transactional
     public void createPaymentMethod(PaymentMethod paymentMethod) {
         EntityManager em = emp.getEntityManager();
+        em.getTransaction().begin();
         em.persist(paymentMethod);
+        em.getTransaction().commit();
     }
 
     @Override
@@ -59,9 +61,13 @@ public class PaymentMethodService implements CrudService<PaymentMethod> {
         EntityManager em = emp.getEntityManager();
         try {
             if (paymentMethod.getId() != null) {
+                em.getTransaction().begin();
                 em.merge(paymentMethod);
+                em.getTransaction().commit();
             } else {
+                em.getTransaction().begin();
                 em.persist(paymentMethod);
+                em.getTransaction().commit();
             }
         }catch (Exception e) {
             throw new ServiceJdbcException(e.getMessage(), e.getCause());
@@ -90,7 +96,9 @@ public class PaymentMethodService implements CrudService<PaymentMethod> {
             if (paymentMethod.getId() == null) {
                 throw new IllegalArgumentException("El ID debe ser válido para actualizar");
             }
-            em.merge(paymentMethod);
+                em.getTransaction().begin();
+                em.merge(paymentMethod);
+                em.getTransaction().commit();
         }catch (Exception e) {
             throw new ServiceJdbcException("Error updating user: " + paymentMethod.getId(), e);
         }
