@@ -13,16 +13,20 @@
 
 
         <properties>
-            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" /> <!-- DB Driver -->
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/paymentdb" /> <!-- BD Mane -->
-            <property name="jakarta.persistence.jdbc.user" value="root" /> <!-- DB User -->
-            <property name="jakarta.persistence.jdbc.password" value="1234" /> <!-- DB Password -->
+            <!-- PostgreSQL Driver -->
+            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver" />
+            <!-- URL de conexión a PostgreSQL -->
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/paymentdb" />
+            <!-- Credenciales de la base de datos -->
+            <property name="jakarta.persistence.jdbc.user" value="postgres" />
+            <property name="jakarta.persistence.jdbc.password" value="1234" />
 
 
             <property name="hibernate.hbm2ddl.auto" value="update" /> <!-- create / create-drop / update -->
             <property name="hibernate.show_sql" value="true" /> <!-- Show SQL in console -->
             <property name="hibernate.format_sql" value="true" /> <!-- Show SQL formatted -->
-
+            <!-- Habilitar logging de SQL -->
+            <property name="hibernate.enable_lazy_load_no_trans" value="false" />
         </properties>
 
     </persistence-unit>
