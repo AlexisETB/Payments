@@ -19,7 +19,9 @@ public class ProductService implements CrudService<Product> {
     @Transactional
     public void createProduct(Product product) {
         EntityManager em = emp.getEntityManager();
+        em.getTransaction().begin();
         em.persist(product);
+         em.getTransaction().commit();
     }
 
     @Override
@@ -48,9 +50,13 @@ public class ProductService implements CrudService<Product> {
         try {
             EntityManager em = emp.getEntityManager();
             if (product.getId() != null && product.getId() > 0) {
+                em.getTransaction().begin();
                 em.merge(product);
+                 em.getTransaction().commit();
             } else {
+                em.getTransaction().begin();
                 em.persist(product);
+                 em.getTransaction().commit();
             }
         }catch (Exception e) {
             throw new ServiceJdbcException(e.getMessage(), e.getCause());
@@ -79,7 +85,9 @@ public class ProductService implements CrudService<Product> {
             if (product.getId() == null || product.getId() <= 0) {
                 throw new IllegalArgumentException("El ID debe ser válido para actualizar");
             }
+            em.getTransaction().begin();
             em.merge(product);
+            em.getTransaction().commit();
         }catch (Exception e) {
             throw new ServiceJdbcException("Error updating user: " + product.getName(), e);
         }
