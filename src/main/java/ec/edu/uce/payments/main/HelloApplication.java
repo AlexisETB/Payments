@@ -1,4 +1,4 @@
-package ec.edu.uce.payments;
+package ec.edu.uce.payments.main;
 
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
