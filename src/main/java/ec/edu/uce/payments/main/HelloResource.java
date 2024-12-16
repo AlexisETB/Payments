@@ -45,9 +45,9 @@ public class HelloResource {
     @Inject
     private PaymentService paymentService;
 
-    @POST
+    @GET
     @Path("/Users/{name}/{email}/{phone}")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes("text/plain")
     public Response createUser(@PathParam("name")
                                String name, @PathParam("email") String email, @PathParam("phone") String phone) {
         try{
@@ -58,9 +58,9 @@ public class HelloResource {
 
             userPService.createUserP(userP);
             return Response.status(Response.Status.CREATED).
-                    entity("Usuario nuevo: " + userP.getName()).build();
+                    entity("Usuario nuevo: " + userP.getName()).build().toString();
         }catch (Exception e){
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build().toString();
         }
     }
 
@@ -132,9 +132,9 @@ public class HelloResource {
         }
     }
 
-    @POST
+    @GET
     @Path("/Products/{name}/{description}/{price}")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes("text/plain")
     public Response createProduct(@PathParam("name")
                                   String name, @PathParam("description") String description,
                                   @PathParam("price") double price) {
@@ -146,9 +146,9 @@ public class HelloResource {
 
             productService.createProduct(product);
             return Response.status(Response.Status.CREATED).
-                    entity("Product nuevo: " + product.getName()).build();
+                    entity("Product nuevo: " + product.getName()).build().toString();
         }catch (Exception e){
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build().toString();
         }
     }
 
@@ -218,9 +218,9 @@ public class HelloResource {
         }
     }
 
-    @POST
+    @GET
     @Path("/Payments/{user}/{metod}")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes("text/plain")
     public Response createPayment(
             @PathParam("user") Long userId,
             @PathParam("metod") Long paymentMethodId,
@@ -332,9 +332,9 @@ public class HelloResource {
         }
     }
 
-    @POST
+    @GET
     @Path("/Method")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes("text/plain")
     public Response createPaymentMethods() {
         try{
             paymentMethod.setId("CreditCard");
