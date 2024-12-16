@@ -11,9 +11,8 @@ import jakarta.transaction.Transactional;
 
 import java.util.logging.Logger;
 
-
-@Interceptor
 @Transactional
+@Interceptor
 public class TransactionManager {
 
     @Inject

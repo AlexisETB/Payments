@@ -71,6 +71,16 @@ public class HelloResource {
             List<UserP> usersP = userPService.list();
             StringBuilder response = new StringBuilder();
             response.append("--------------Users List--------------\n\n");
+            response.append(String.format("| %-5s | %-20s | %-25s | %-15s | %-20s | %-20s |\n",
+                    "ID", "Name", "Email", "Phone", "Creation Date", "Update Date"));
+            response.append("---------------------------------------------------------------\n");
+
+
+            for (UserP userP : usersP) {
+                response.append(String.format("| %-5d | %-20s | %-25s | %-15s | %-20s | %-20s |\n",
+                        userP.getId(), userP.getName(), userP.getEmail(), userP.getPhone(),
+                        userP.getCreateData(), userP.getUptadeData()));
+            }
 
             return Response.ok(response.toString()).build();
         }catch (Exception e){
@@ -86,9 +96,17 @@ public class HelloResource {
         try{
             UserP userP = userPService.findById(id);
             StringBuilder response = new StringBuilder();
-            response.append("--------------User id--------------\n\n");
+            response.append("--------------User Details--------------\n\n");
+            response.append(String.format("| %-5s | %-20s | %-25s | %-15s | %-20s | %-20s |\n",
+                    "ID", "Name", "Email", "Phone", "Creation Date", "Update Date"));
+            response.append("---------------------------------------------------------------\n");
 
-            return Response.ok(response.toString() + userP).build();
+
+            response.append(String.format("| %-5d | %-20s | %-25s | %-15s | %-20s | %-20s |\n",
+                    userP.getId(), userP.getName(), userP.getEmail(), userP.getPhone(),
+                    userP.getCreateData(), userP.getUptadeData()));
+
+            return Response.ok(response.toString()).build();
         }catch (Exception e){
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Error retrieving Users: " + e.getMessage())
@@ -97,7 +115,7 @@ public class HelloResource {
     }
 
     @PUT
-    @Path("/Users/{id}")
+    @Path("/Userupd/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateUsers(@PathParam("id") Long id, UserP userP) {
         try{
@@ -141,6 +159,15 @@ public class HelloResource {
             List<Product> products = productService.list();
             StringBuilder response = new StringBuilder();
             response.append("--------------Products List--------------\n\n");
+            response.append(String.format("| %-5s | %-20s | %-30s | %-10s | %-20s |\n",
+                    "ID", "Name", "Description", "Price", "Creation Date"));
+            response.append("---------------------------------------------------------------\n");
+
+            for (Product product : products) {
+                response.append(String.format("| %-5d | %-20s | %-30s | %-10.2f | %-20s |\n",
+                        product.getId(), product.getName(), product.getDescription(),
+                        product.getPrice(), product.getCreateData()));
+            }
 
             return Response.ok(response.toString()).build();
         }catch (Exception e){
@@ -156,9 +183,16 @@ public class HelloResource {
         try{
             Product product = productService.findById(id);
             StringBuilder response = new StringBuilder();
-            response.append("--------------User id--------------\n\n");
+            response.append("--------------Product Details--------------\n\n");
+            response.append(String.format("| %-5s | %-20s | %-30s | %-10s | %-20s |\n",
+                    "ID", "Name", "Description", "Price", "Creation Date"));
+            response.append("---------------------------------------------------------------\n");
 
-            return Response.ok(response.toString() + product).build();
+            response.append(String.format("| %-5d | %-20s | %-30s | %-10.2f | %-20s |\n",
+                    product.getId(), product.getName(), product.getDescription(),
+                    product.getPrice(), product.getCreateData()));
+
+            return Response.ok(response.toString()).build();
         }catch (Exception e){
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Error retrieving Users: " + e.getMessage())
@@ -232,6 +266,19 @@ public class HelloResource {
             List<PaymentDetail> payments = paymentService.list();
             StringBuilder response = new StringBuilder();
             response.append("--------------Payments List--------------\n\n");
+            response.append(String.format("| %-5s | %-10s | %-15s | %-10s | %-15s | %-10s |\n",
+                    "ID", "User ID", "User Name", "Payment Method", "Total Amount", "Product Count"));
+            response.append("----------------------------------------------------------------------------------------------------\n");
+
+            for (PaymentDetail payment : payments) {
+                String userName = payment.getUser() != null ? payment.getUser().getName() : "Unknown";
+                String paymentMethod = payment.getPaymentMethod() != null ? payment.getPaymentMethod().getId() : "Unknown";
+                int productCount = payment.getProducts() != null ? payment.getProducts().size() : 0;
+
+                response.append(String.format("| %-5d | %-10d | %-15s | %-10s | %-10.2f | %-10d |\n",
+                        payment.getId(), payment.getUser().getId(), userName, paymentMethod,
+                        payment.getTotalAmount(), productCount));
+            }
 
             return Response.ok(response.toString()).build();
         }catch (Exception e){
@@ -247,9 +294,19 @@ public class HelloResource {
         try{
             PaymentDetail payments = paymentService.findById(id);
             StringBuilder response = new StringBuilder();
-            response.append("--------------User id--------------\n\n");
+            response.append("--------------Payment Detail--------------\n\n");
+            response.append(String.format("| %-15s | %-15s |\n", "Field", "Value"));
+            response.append("------------------------------------------\n");
 
-            return Response.ok(response.toString() + payments).build();
+            response.append(String.format("| %-15s | %-15d |\n", "Payment ID", payments.getId()));
+            response.append(String.format("| %-15s | %-15d |\n", "User ID", payments.getUser().getId()));
+            response.append(String.format("| %-15s | %-15s |\n", "User Name", payments.getUser().getName()));
+            response.append(String.format("| %-15s | %-15s |\n", "Payment Method", payments.getPaymentMethod().getId()));
+            response.append(String.format("| %-15s | %-15.2f |\n", "Total Amount", payments.getTotalAmount()));
+            response.append(String.format("| %-15s | %-15d |\n", "Product Count", payments.getProducts().size()));
+
+            return Response.ok(response.toString()).build();
+
         }catch (Exception e){
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Error retrieving Users: " + e.getMessage())
@@ -276,7 +333,7 @@ public class HelloResource {
     }
 
     @POST
-    @Path("/Methods")
+    @Path("/Method")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createPaymentMethods() {
         try{
@@ -312,6 +369,13 @@ public class HelloResource {
             List<PaymentMethod> methods = paymentMethodService.list();
             StringBuilder response = new StringBuilder();
             response.append("--------------Payment Methods List--------------\n\n");
+            response.append(String.format("| %-15s | %-25s | %-25s |\n", "Method ID", "Description", "Details"));
+            response.append("------------------------------------------------------------\n");
+
+            for (PaymentMethod method : methods) {
+                response.append(String.format("| %-15s | %-25s | %-25s |\n",
+                        method.getId(), method.getDescription(), method.getDetails()));
+            }
 
             return Response.ok(response.toString()).build();
         }catch (Exception e){
