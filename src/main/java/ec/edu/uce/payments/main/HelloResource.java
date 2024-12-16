@@ -115,7 +115,7 @@ public class HelloResource {
     }
 
     @PUT
-    @Path("/Userupd/{id}")
+    @Path("/UserUpd/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateUsers(@PathParam("id") Long id, UserP userP) {
         try{
@@ -201,7 +201,7 @@ public class HelloResource {
     }
 
     @PUT
-    @Path("/Products/{id}")
+    @Path("/ProductsUpd/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateProducts(@PathParam("id") Long id, Product product) {
         try{
@@ -315,7 +315,7 @@ public class HelloResource {
     }
 
     @PUT
-    @Path("/Payments/{id}")
+    @Path("/PaymentsUpd/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updatePayments(@PathParam("id") Long id, PaymentDetail payments) {
         try{
