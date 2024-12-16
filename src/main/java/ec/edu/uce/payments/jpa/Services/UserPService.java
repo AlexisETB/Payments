@@ -89,7 +89,9 @@ public class UserPService implements CrudService<UserP> {
             if (user.getId() == null || user.getId() <= 0) {
                 throw new IllegalArgumentException("El ID debe ser válido para actualizar");
             }
-            em.merge(user);
+            em.getTransaction().begin();
+                em.merge(user);
+                em.getTransaction().commit();
         }catch (Exception e) {
             throw new ServiceJdbcException("Error updating user: " + user.getName(), e);
         }
