@@ -8,6 +8,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("/pay")
@@ -216,14 +217,19 @@ public class HelloResource {
     }
 
     @GET
-    @Path("/Payments/{user}/{metod}")
+    @Path("/Payments/{user}/{method}") //?productId=1&productId=2&productId=3
     @Consumes("text/plain")
     public Response createPayment(
             @PathParam("user") Long userId,
-            @PathParam("metod") String paymentMethodId,
-            List<Product> products
+            @PathParam("method") String paymentMethodId,
+            @QueryParam("productId") List<Long> productIds
     ) {
         try {
+            if (productIds == null || productIds.isEmpty()) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"error\": \"La lista de productos no puede estar vacía.\"}")
+                        .build();
+            }
 
             UserP user = userPService.findById(userId);
             if (user == null) {
@@ -237,12 +243,23 @@ public class HelloResource {
                         .entity("Método de pago no encontrado").build();
             }
 
+            List<Product> products = new ArrayList<>();
+            for (Long productId : productIds) {
+                Product product = productService.findById(productId);
+                if (product == null) {
+                    return Response.status(Response.Status.NOT_FOUND)
+                            .entity("{\"error\": \"Producto con ID " + productId + " no encontrado.\"}")
+                            .build();
+                }
+                products.add(product);
+            }
+
             PaymentDetail paymentDetail = new PaymentDetail();
             paymentDetail.setUser(user);
             paymentDetail.setPaymentMethod(paymentMethod);
             paymentDetail.setProducts(products);
-
             paymentDetail.calculateTotalAmount();
+            paymentDetail.setTotalAmount(paymentDetail.getTotalAmount());
 
             paymentService.createPayment(paymentDetail); 
 
